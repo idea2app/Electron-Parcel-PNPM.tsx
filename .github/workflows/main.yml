@@ -1,11 +1,20 @@
 name: CI & CD
+
 on:
   push:
-    branches:
+    branches-ignore:
       - master
+    tags:
+      - v*
+
 jobs:
-  Build-and-Deploy:
-    runs-on: ubuntu-latest
+  Build-and-Release:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
     permissions:
       contents: write
     steps:
@@ -13,7 +22,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -22,11 +31,11 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Build Production
-        run: pnpm build
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: pnpm make
 
-      - name: Deploy Production
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_dir: ./dist
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
-          force_orphan: true
+      - name: Release Production
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run publish

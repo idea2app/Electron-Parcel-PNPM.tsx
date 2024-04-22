@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "outDir": "../../dist/shell"
+  },
+  "include": ["./**/*"]
+}

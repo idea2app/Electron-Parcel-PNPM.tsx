@@ -1,22 +1,58 @@
 {
-  "name": "web-quick-start",
+  "name": "electron-parcel-pnpm.ts",
   "version": "1.0.0",
-  "private": true,
+  "license": "LGPL-3.0-or-later",
+  "author": "",
+  "description": "",
+  "type": "module",
+  "main": "dist/shell/index.js",
   "dependencies": {
+    "electron-log": "^5.1.2",
+    "open": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@parcel/transformer-less": "~2.10.3",
-    "@types/react": "^18.2.39",
-    "@types/react-dom": "^18.2.17",
-    "parcel": "~2.10.3",
-    "process": "^0.11.10"
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
+    "@parcel/transformer-less": "~2.12.0",
+    "@types/node": "^18.19.31",
+    "concurrently": "^8.2.2",
+    "electron": "^30.0.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "nodemon": "^3.1.0",
+    "parcel": "~2.12.0",
+    "prettier": "^3.2.5",
+    "typescript": "~5.4.5"
   },
-  "browserslist": "> 0.5%, last 2 versions, not dead, IE 11",
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "none",
+    "arrowParens": "avoid"
+  },
+  "lint-staged": {
+    "*.{md,json,yml,js,jsx,cjs,mjs,ts,tsx,cts,mts}": "prettier --write"
+  },
   "scripts": {
+    "prepare": "husky",
+    "test": "lint-staged",
     "clean": "rm -rf .parcel-cache/ dist/",
-    "start": "npm run clean  &&  parcel source/index.html",
-    "build": "npm run clean  &&  parcel build --public-url . source/index.html"
+    "dev": "rm -rf .parcel-cache/  &&  cd source/renderer/  &&  parcel index.html",
+    "build": "rm -rf .parcel-cache/ dist/renderer  &&  cd source/renderer/  &&  parcel build index.html --public-url . --dist-dir ../../dist/renderer",
+    "compile-shell-ts": "cd source/shell/  &&  tsc",
+    "compile-bridge-ts": "cd source/bridge/  &&  tsc",
+    "watch-shell-ts": "npm run compile-shell-ts -- --watch",
+    "watch-bridge-ts": "npm run compile-bridge-ts -- --watch",
+    "watch-electron-js": "nodemon --watch dist/shell/ --watch dist/bridge --exec electron .",
+    "pack": "rm -rf dist/  &&  concurrently 'npm:compile-*'",
+    "start": "npm run pack  &&  concurrently 'npm:dev' 'npm:watch-*'",
+    "package": "npm run pack -- 'npm:build'  &&  electron-forge package",
+    "make": "npm run pack -- 'npm:build'  &&  electron-forge make",
+    "publish": "npm run pack -- 'npm:build'  &&  electron-forge publish"
   }
 }

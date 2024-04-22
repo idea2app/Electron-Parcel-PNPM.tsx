@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "UMD",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "outDir": "../../dist/bridge"
+  },
+  "include": ["./**/*"]
+}
