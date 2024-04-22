@@ -1,9 +1,9 @@
 {
   "name": "electron-parcel-pnpm.ts",
-  "version": "1.0.0",
-  "license": "LGPL-3.0-or-later",
-  "author": "",
-  "description": "",
+  "version": "0.4.0",
+  "license": "UNLICENSED",
+  "author": "Electron user",
+  "description": "Electron app",
   "type": "module",
   "main": "dist/shell/index.js",
   "dependencies": {
@@ -42,7 +42,7 @@
     "prepare": "husky",
     "test": "lint-staged",
     "clean": "rm -rf .parcel-cache/ dist/",
-    "dev": "rm -rf .parcel-cache/  &&  cd source/renderer/  &&  parcel index.html",
+    "dev": "rm -rf .parcel-cache/ source/renderer/dist/  &&  cd source/renderer/  &&  parcel index.html",
     "build": "rm -rf .parcel-cache/ dist/renderer  &&  cd source/renderer/  &&  parcel build index.html --public-url . --dist-dir ../../dist/renderer",
     "compile-shell-ts": "cd source/shell/  &&  tsc",
     "compile-bridge-ts": "cd source/bridge/  &&  tsc",

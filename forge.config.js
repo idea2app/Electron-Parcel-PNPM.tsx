@@ -1,11 +1,15 @@
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 
 const { name, license, author, description } = readFileSync(
   'package.json',
   'utf8'
 );
 const options = { name, license, author, description };
-const packagerConfig = { executableName: name };
+
+const runtimeAssets = ['package.json', 'node_modules', 'dist'];
+const ignore = readdirSync('.').filter(name => !runtimeAssets.includes(name));
+
+const packagerConfig = { executableName: name, ignore };
 
 export default {
   packagerConfig,
@@ -36,10 +40,7 @@ export default {
     {
       name: '@electron-forge/publisher-github',
       config: {
-        repository: {
-          owner: 'idea2app',
-          name: 'Electron-Parcel-PNPM.ts'
-        },
+        repository: { owner: 'idea2app', name: 'Electron-Parcel-PNPM.ts' },
         prerelease: true
       }
     }
