@@ -1,0 +1,22 @@
+{
+  "name": "web-quick-start",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-less": "~2.10.3",
+    "@types/react": "^18.2.39",
+    "@types/react-dom": "^18.2.17",
+    "parcel": "~2.10.3",
+    "process": "^0.11.10"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead, IE 11",
+  "scripts": {
+    "clean": "rm -rf .parcel-cache/ dist/",
+    "start": "npm run clean  &&  parcel source/index.html",
+    "build": "npm run clean  &&  parcel build --public-url . source/index.html"
+  }
+}
