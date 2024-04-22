@@ -1,3 +1,12 @@
+# Dependency
+package-lock.json
+yarn.lock
 node_modules/
+
+# Bundle
 .parcel-cache/
 dist/
+out/
+
+# IDE
+.vscode/settings.json
