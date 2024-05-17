@@ -13,6 +13,20 @@ const writeFile = promisify(write),
   Executable = ['.exe', '.bat', '.cmd', '.ps1', '.run', '.sh'];
 
 export default () => {
+  ipcMain.handle('window-shell-maximize', () => {
+    const window = BrowserWindow.getFocusedWindow();
+
+    const maximized = window?.isMaximized();
+
+    if (maximized) {
+      window?.unmaximize();
+      return false;
+    } else {
+      window?.maximize();
+      return true;
+    }
+  });
+
   ipcMain.handle('window-shell-minimize', () => {
     const window = BrowserWindow.getFocusedWindow();
 
@@ -43,8 +57,20 @@ export default () => {
   });
 
   ipcMain.handle(
+    'show-open-file-picker',
+    async (event, { multiple }: { multiple?: boolean } = {}) => {
+      const { filePaths } = await dialog.showOpenDialog(
+        BrowserWindow.getFocusedWindow(),
+        { properties: ['openFile', multiple ? 'multiSelections' : undefined] }
+      );
+      if (!filePaths[0]) throw new ReferenceError('User canceled file picking');
+
+      return filePaths.map(realPath => ({ realPath }));
+    }
+  );
+  ipcMain.handle(
     'show-save-file-picker',
-    async (event, { suggestedName }: { suggestedName?: string }) => {
+    async (event, { suggestedName }: { suggestedName?: string } = {}) => {
       const { filePath } = await dialog.showSaveDialog(
         BrowserWindow.getFocusedWindow(),
         { defaultPath: suggestedName }

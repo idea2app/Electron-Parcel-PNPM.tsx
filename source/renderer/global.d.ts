@@ -5,13 +5,17 @@ declare interface FileSystemHandle {
 }
 
 declare const windowShell: {
+  maximize: () => boolean;
   minimize: () => void;
   hide: () => void;
   close: () => void;
   createFileSystemHandle: (meta: FileSystemHandle) => FileSystemHandle;
   showDirectoryPicker: () => Promise<FileSystemDirectoryHandle>;
   createFileHandle: (meta: FileSystemFileHandle) => FileSystemFileHandle;
-  showSaveFilePicker: (options: {
+  showOpenFilePicker: (options?: {
+    multiple?: boolean;
+  }) => Promise<FileSystemFileHandle[]>;
+  showSaveFilePicker: (options?: {
     suggestedName?: string;
   }) => Promise<FileSystemFileHandle>;
   openURI: (target: string, parameters?: string[]) => Promise<number>;

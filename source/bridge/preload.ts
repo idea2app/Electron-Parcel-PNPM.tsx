@@ -37,6 +37,7 @@ const openURI = (target: string, parameters?: string[]) =>
   ipcRenderer.invoke('open-URI', target, parameters);
 
 contextBridge.exposeInMainWorld('windowShell', {
+  maximize: () => ipcRenderer.invoke('window-shell-maximize'),
   minimize: () => ipcRenderer.invoke('window-shell-minimize'),
   hide: () => ipcRenderer.invoke('window-shell-hide'),
   close: () => ipcRenderer.invoke('window-shell-close'),
@@ -47,7 +48,12 @@ contextBridge.exposeInMainWorld('windowShell', {
     return createFileSystemHandle(meta);
   },
   createFileHandle,
-  showSaveFilePicker: async (options: { suggestedName?: string }) => {
+  showOpenFilePicker: async (options: { multiple?: boolean } = {}) => {
+    const meta = await ipcRenderer.invoke('show-open-file-picker', options);
+
+    return meta.map(createFileHandle);
+  },
+  showSaveFilePicker: async (options: { suggestedName?: string } = {}) => {
     const meta = await ipcRenderer.invoke('show-save-file-picker', options);
 
     return createFileHandle(meta);
