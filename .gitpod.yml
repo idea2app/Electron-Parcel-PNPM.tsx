@@ -25,6 +25,3 @@ tasks:
   - command: |
       pnpm i
       pnpm dev
-
-      pnpm i vercel -g
-      vercel login --github --oob
