@@ -1,4 +1,5 @@
 import { BrowserWindow, app } from 'electron';
+import SquirrelStartup from 'electron-squirrel-startup';
 import { join } from 'path';
 
 import registerIPC from './IPC.js';
@@ -24,6 +25,8 @@ async function createWindow() {
 }
 
 (async () => {
+  if (SquirrelStartup) return app.quit();
+
   await app.whenReady();
 
   registerIPC();
